@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "deny": ["Edit(ProjectSettings/**)", "Edit(**/*.unity)", "Edit(**/*.prefab)"],
+    "ask": ["Edit(Packages/**)"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *.cs) PATH=\"$PATH:$HOME/.dotnet\" dotnet format whitespace \"$CLAUDE_PROJECT_DIR\" --folder --include \"$f\" >&2 ;; esac; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
